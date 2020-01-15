@@ -1,0 +1,26 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZFA_NUMERIK_ISLEMLERR_TOP
+*&---------------------------------------------------------------------
+
+CLASS : gcl_class DEFINITION DEFERRED.  "TANIMLANMA TANIMLANMIŞ
+DATA : go_object TYPE REF TO gcl_class.
+
+
+TYPES: BEGIN OF  gty_nmrik,
+       p_nmrik  TYPE i,
+       END  OF  gty_nmrik.
+
+DATA: gt_nmrik  TYPE TABLE OF  gty_nmrik,
+      gs_nmrik  TYPE gty_nmrik,
+*      gv_num    TYPE string,
+      gv_hatlar TYPE i,
+      gv_saymak TYPE i,
+      gv_ort    TYPE p DECIMALS 2,    "ondalık sayıları 29 basamağa kadar hassiyetle kullanabildiği için ve tamsayı tipleri
+      gv_toplam    TYPE i .           " p Parked Number
+
+
+
+DATA :    gv_temp   TYPE i,
+          gv_sayac  TYPE i,
+          gv_sayac2 TYPE i,
+          gv_capa   TYPE i.

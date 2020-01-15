@@ -1,0 +1,41 @@
+*&---------------------------------------------------------------------*
+*& Report  ZFA_NUMERIK_ISLEMLERR
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+REPORT zfa_numerik_islemlerr.
+
+INCLUDE zfa_numerik_islemlerr_top.
+INCLUDE zfa_numerik_islemlerr_scrn.
+INCLUDE zfa_numerik_islemlerr_clss.
+INCLUDE zfa_numerik_islemlerr_f01.
+
+
+AT SELECTION-SCREEN.
+
+
+  INITIALIZATION.
+  CREATE OBJECT go_object
+    EXPORTING
+      iv_nmrik = p_nmrik.
+
+
+
+START-OF-SELECTION.
+
+  IF r_virgul = abap_true .
+    go_object->virgul( ).
+  ELSEIF r_inkta = abap_true.
+    go_object->inkta( ).
+  ELSEIF r_nktliv = abap_true.
+    go_object->nktav( ).
+  ELSEIF r_unlem = abap_true.
+    go_object->unlem( ).
+  ENDIF.
+
+
+
+END-OF-SELECTION.

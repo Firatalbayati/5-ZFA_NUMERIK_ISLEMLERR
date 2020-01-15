@@ -1,0 +1,17 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZFA_NUMERIK_ISLEMLERR_SCRN
+*&---------------------------------------------------------------------*
+
+
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.
+SELECTION-SCREEN SKIP.
+
+PARAMETERS: p_nmrik TYPE c LENGTH 100.
+
+SELECTION-SCREEN SKIP.
+PARAMETERS : r_virgul RADIOBUTTON GROUP rb1,
+             r_inkta RADIOBUTTON GROUP rb1,
+             r_nktliv RADIOBUTTON GROUP rb1,
+             r_unlem RADIOBUTTON GROUP rb1.
+SELECTION-SCREEN SKIP.
+SELECTION-SCREEN END OF BLOCK b1.

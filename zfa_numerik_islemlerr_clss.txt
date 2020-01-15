@@ -1,0 +1,278 @@
+*&---------------------------------------------------------------------*
+*&  Include           ZFA_NUMERIK_ISLEMLERR_CLSS
+*&---------------------------------------------------------------------*
+
+*&---------------------------------------------------------------------*
+*&  Include           ZFA_KARAKTER_ISLEMLERI_CLSS
+*&---------------------------------------------------------------------*
+
+CLASS gcl_class DEFINITION FINAL. "TANIM FİNALİ
+
+  PUBLIC SECTION.
+
+    METHODS: constructor " بناء
+      IMPORTING
+         iv_nmrik TYPE c,
+         virgul,
+         inkta,
+         nktav,
+         unlem.
+
+    CLASS-DATA:
+         gv_nmrik   TYPE c.
+
+
+ENDCLASS.
+
+
+
+
+CLASS gcl_class IMPLEMENTATION.
+
+  METHOD constructor.  " بناء
+    gv_nmrik = iv_nmrik.
+  ENDMETHOD.                    "constructor
+
+
+
+METHOD virgul.
+
+  IF ( p_nmrik CO ', 0123456789').        " co sadece içeriyor ,cn sadece içermiyor ,ca Herhangi içerir ,na Hiç içermez
+                                          "cs Dize içerir ,ns Dize içermiyor ,cp Suits pattern ,np Does not suit pattern
+
+    gv_hatlar = strlen( p_nmrik ).          "gv_hatlar = parameternin uzunluk sayısı
+
+    WHILE gv_sayac LE gv_hatlar.             " <= while gv_hatların uzunluğuna eşit olana kadar döner , 0 dan başlar
+
+      IF p_nmrik+gv_sayac(1) EQ ',' OR gv_sayac EQ gv_hatlar.
+        gv_sayac2 = gv_sayac - gv_capa.
+        gv_temp = p_nmrik+gv_capa(gv_sayac2).
+        gv_capa = gv_sayac + 1.
+        gs_nmrik-p_nmrik = gv_temp.
+        APPEND gs_nmrik TO gt_nmrik.          " gs_nmrik satrını gt_nmrik satrına ekle
+      ENDIF.
+      gv_sayac = gv_sayac + 1.                " gv_sayacı 1 artır
+    ENDWHILE.
+******************************************************************************
+    gv_saymak = lines( gt_nmrik ).
+
+    SORT gt_nmrik DESCENDING BY p_nmrik.               " azalan olarak sırala by parametreye girilen değerleri
+                                                       " DESCENDING azalan , varsayılan olarak verileri artan düzende sıralar
+
+    READ TABLE gt_nmrik INDEX 1 INTO gs_nmrik.         " azalan olduğu için 1. index en büyük olacak
+    WRITE :/ 'En buyuk sayi  ', gs_nmrik-p_nmrik.      " gs_nmrik artık satır satır sıralanmış
+    SKIP 1.
+
+    READ TABLE gt_nmrik INDEX gv_saymak INTO gs_nmrik. " azalan olduğu için son index gv_saymak tan alacak yani son satır
+    WRITE :/ 'En kucuk sayi  ', gs_nmrik-p_nmrik.
+    SKIP 1.
+******************************************************************************
+
+    LOOP AT gt_nmrik INTO gs_nmrik.                    " loop kullanarak gt_nmrik içine gs_nmrik satrınıa ekleriyoruz
+      gv_toplam = gv_toplam + gs_nmrik-p_nmrik.
+    ENDLOOP.
+
+    WRITE:/ 'Toplam Degeri  ', gv_toplam.
+    SKIP 1.
+
+    gv_ort = gv_toplam / gv_hatlar.
+    WRITE:/ 'Ortalama Degeri  ', gv_ort.
+    SKIP 1.
+**********************************************************************************
+    LOOP AT gt_nmrik INTO gs_nmrik.
+      WRITE:/ 'Buyukten kucuge siralama  ', gs_nmrik-p_nmrik.
+    ENDLOOP.
+    SKIP 1.
+
+    DO gv_saymak  TIMES.                                        " gv_saymak kadar döner  gv_saymak = lines( gt_nmrik ).
+      READ TABLE gt_nmrik INDEX gv_saymak INTO gs_nmrik.
+      WRITE :/ 'Kucukten buyuge siralama  ', gs_nmrik-p_nmrik .
+      gv_saymak = gv_saymak - 1.                                " gv_saymak her dönğüde 1 azalır
+    ENDDO.
+
+  ELSEIF ( p_nmrik CN ', 0123456789').
+    MESSAGE i003(zfa_message_class) DISPLAY LIKE 'E'.
+    EXIT.
+  ENDIF.
+
+  ENDMETHOD.
+
+
+
+  METHOD inkta.
+
+  IF ( p_nmrik CO ': 0123456789').
+    gv_hatlar = strlen( p_nmrik ).
+    WHILE gv_sayac LE gv_hatlar.
+
+      IF p_nmrik+gv_sayac(1) EQ ':' OR gv_sayac EQ gv_hatlar.
+        gv_sayac2 = gv_sayac - gv_capa.
+        gv_temp = p_nmrik+gv_capa(gv_sayac2).
+        gv_capa = gv_sayac + 1.
+        gs_nmrik-p_nmrik = gv_temp.
+        APPEND gs_nmrik TO gt_nmrik.
+      ENDIF.
+
+      gv_sayac = gv_sayac + 1.
+    ENDWHILE.
+
+    gv_saymak = lines( gt_nmrik ).
+    SORT gt_nmrik DESCENDING BY p_nmrik.
+
+    READ TABLE gt_nmrik INDEX 1 INTO gs_nmrik.
+    WRITE :/ 'En buyuk sayi  ', gs_nmrik-p_nmrik.
+    SKIP 1.
+
+    READ TABLE gt_nmrik INDEX gv_saymak INTO gs_nmrik.
+    WRITE :/ 'En kucuk sayi  ', gs_nmrik-p_nmrik.
+    SKIP 1.
+
+    LOOP AT gt_nmrik INTO gs_nmrik.
+      gv_toplam = gv_toplam + gs_nmrik-p_nmrik.
+    ENDLOOP.
+
+    WRITE:/ 'Toplam Degeri  ', gv_toplam.
+    SKIP 1.
+
+    gv_ort = gv_toplam / gv_hatlar.
+    WRITE:/ 'Ortalama Degeri  ', gv_ort.
+    SKIP 1.
+
+    LOOP AT gt_nmrik INTO gs_nmrik.
+      WRITE:/ 'Buyukten kucuge siralama  ', gs_nmrik-p_nmrik.
+    ENDLOOP.
+    SKIP 1.
+
+    DO gv_saymak TIMES.
+      READ TABLE gt_nmrik INDEX gv_saymak INTO gs_nmrik.
+      WRITE :/ 'Kucukten buyuge siralama  ', gs_nmrik-p_nmrik .
+      gv_saymak = gv_saymak - 1.
+    ENDDO.
+
+
+  ELSEIF ( p_nmrik CN ': 0123456789').
+    MESSAGE i004(zfa_message_class) DISPLAY LIKE 'E'.
+    EXIT.
+  ENDIF.
+
+  ENDMETHOD.
+
+
+
+  METHOD nktav.
+  IF ( p_nmrik CO '; 0123456789').
+    gv_hatlar = strlen( p_nmrik ).
+
+    WHILE gv_sayac LE gv_hatlar.
+
+      IF p_nmrik+gv_sayac(1) EQ ';' OR gv_sayac EQ gv_hatlar.
+        gv_sayac2 = gv_sayac - gv_capa.
+        gv_temp = p_nmrik+gv_capa(gv_sayac2).
+        gv_capa = gv_sayac + 1.
+        gs_nmrik-p_nmrik = gv_temp.
+        APPEND gs_nmrik TO gt_nmrik.
+      ENDIF.
+
+      gv_sayac = gv_sayac + 1.
+    ENDWHILE.
+
+    gv_saymak = lines( gt_nmrik ).
+
+    SORT gt_nmrik DESCENDING BY p_nmrik.
+
+    READ TABLE gt_nmrik INDEX 1 INTO gs_nmrik.
+    WRITE :/ 'En buyuk sayi  ', gs_nmrik-p_nmrik.
+    SKIP 1.
+
+    READ TABLE gt_nmrik INDEX gv_saymak INTO gs_nmrik.
+    WRITE :/ 'En kucuk sayi  ', gs_nmrik-p_nmrik.
+    SKIP 1.
+
+    LOOP AT gt_nmrik INTO gs_nmrik.
+      gv_toplam = gv_toplam + gs_nmrik-p_nmrik.
+    ENDLOOP.
+
+    WRITE:/ 'Toplam Degeri  ', gv_toplam.
+    SKIP 1.
+
+    gv_ort = gv_toplam / gv_hatlar.
+    WRITE:/ 'Ortalama Degeri  ', gv_ort.
+    SKIP 1.
+
+    LOOP AT gt_nmrik INTO gs_nmrik.
+      WRITE:/ 'Buyukten kucuge siralama  ', gs_nmrik-p_nmrik.
+    ENDLOOP.
+    SKIP 1.
+
+    DO gv_saymak TIMES.
+      READ TABLE gt_nmrik INDEX gv_saymak INTO gs_nmrik.
+      WRITE :/ 'Kucukten buyuge siralama  ', gs_nmrik-p_nmrik .
+      gv_saymak = gv_saymak - 1.
+    ENDDO.
+
+  ELSEIF ( p_nmrik CN '; 0123456789').
+    MESSAGE i005(zfa_message_class) DISPLAY LIKE 'E'.
+    EXIT.
+  ENDIF.
+
+  ENDMETHOD.
+
+
+
+
+  METHOD unlem.
+  IF ( p_nmrik CO '  0123456789 !').
+    gv_hatlar = strlen( p_nmrik ).
+
+    WHILE gv_sayac LE gv_hatlar.
+
+      IF p_nmrik+gv_sayac(1) EQ '!' OR gv_sayac EQ gv_hatlar.
+        gv_sayac2 = gv_sayac - gv_capa.
+        gv_temp = p_nmrik+gv_capa(gv_sayac2).
+        gv_capa = gv_sayac + 1.
+        gs_nmrik-p_nmrik = gv_temp.
+        APPEND gs_nmrik TO gt_nmrik.
+      ENDIF.
+      gv_sayac = gv_sayac + 1.
+    ENDWHILE.
+
+    gv_saymak = lines( gt_nmrik ).
+    SORT gt_nmrik DESCENDING BY p_nmrik.
+
+    READ TABLE gt_nmrik INDEX 1 INTO gs_nmrik.
+    WRITE :/ 'En buyuk sayi  ', gs_nmrik-p_nmrik.
+    SKIP 1.
+
+    READ TABLE gt_nmrik INDEX gv_saymak INTO gs_nmrik.
+    WRITE :/ 'En kucuk sayi  ', gs_nmrik-p_nmrik.
+    SKIP 1.
+
+    LOOP AT gt_nmrik INTO gs_nmrik.
+      gv_toplam = gv_toplam + gs_nmrik-p_nmrik.
+    ENDLOOP.
+
+    WRITE:/ 'Toplam Degeri  ', gv_toplam.
+    SKIP 1.
+
+    gv_ort = gv_toplam / gv_hatlar.
+    WRITE:/ 'Ortalama Degeri  ', gv_ort.
+    SKIP 1.
+
+    LOOP AT gt_nmrik INTO gs_nmrik.
+      WRITE:/ 'Buyukten kucuge siralama  ', gs_nmrik-p_nmrik.
+    ENDLOOP.
+    SKIP 1.
+
+    DO gv_saymak TIMES.
+      READ TABLE gt_nmrik INDEX gv_saymak INTO gs_nmrik.
+      WRITE :/ 'Kucukten buyuge siralama  ', gs_nmrik-p_nmrik .
+      gv_saymak = gv_saymak - 1.
+    ENDDO.
+
+  ELSEIF ( p_nmrik CN '0123456789 !').
+    MESSAGE i006(zfa_message_class) DISPLAY LIKE 'E'.
+    EXIT.
+  ENDIF .
+
+  ENDMETHOD.
+ENDCLASS.
